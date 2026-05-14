@@ -1,4 +1,4 @@
-#include "totvs.ch"
+﻿#include "totvs.ch"
 
 /*/{Protheus.doc} zCadastro
 Monta a tela de cadastro com 3 abas
@@ -9,16 +9,16 @@ Monta a tela de cadastro com 3 abas
 /*/
 User Function zCadastro()
 	// ===================================================================================================
-	// Vari�veis da Estrutura da tela: TDialog e TFolder
+	// Variáveis da Estrutura da tela: TDialog e TFolder
 	// ===================================================================================================
 	Local oDialog
 	Local aSize := MsAdvSize() // Permite ocupar 100% da tela de acordo com o tamanho do dispositivo.
 	// Abas
-	Local aFolder := {"Dados Pessoais", "Endere�o"}
+	Local aFolder := {"Dados Pessoais", "Endereço"}
 	Local oFolder
 
 	// ===================================================================================================
-	// Vari�veis da Aba 01: Cadastros
+	// Variáveis da Aba 01: Cadastros
 	// ===================================================================================================
 	Local oSayNome
 	Local oGetNome
@@ -56,7 +56,7 @@ User Function zCadastro()
 	Local cGetCPF
 
 	// ===================================================================================================
-	// Vari�veis da Aba 02: Endere�o
+	// Variáveis da Aba 02: Endereço
 	// ===================================================================================================
 	Local oSayEndereco
 	Local oGetEndereco
@@ -67,7 +67,7 @@ User Function zCadastro()
 	Local oGetBairro
 	Local cGetBairro
 
-	// Tipo de im�vel
+	// Tipo de imóvel
 	Local oSayImovel
 	Local aImoveis := {"Casa", "Apartamento", "Outro"}
 	Local cImovel := aImoveis[1] // Armazena o valor selecionado do array aImoveis
@@ -85,10 +85,19 @@ User Function zCadastro()
 	Local oComboUF
 
 	// Cidade
-	Local oSayCidade	
+	Local oSayCidade
 	Local oGetCidade
 	Local cGetCidade
 
+
+	// =============================================================================
+	// Botões para exibir os dados
+	// =============================================================================
+	Local oBtnFolder1
+	Local aDados01
+
+	Local oBtnFolder2
+	Local aDados02
 
 	// =============================================================================
 	// Estrutura da tela (TDialog com Abas)
@@ -127,7 +136,7 @@ User Function zCadastro()
 	// Grupo: Sexo
 	oGroupSexo := tGroup():New(01,330,50,430,"Sexo",oFolder:aDialogs[1],,,.T.)
 	oRadioSexo := TRadMenu():New (10,340,aSexo,,oFolder:aDialogs[1],,,,,,,,60,20,,,,.T.)
-	oRadioSexo:bSetGet := {|u| IIF(PCount()==0,nSexo,nSexo:=u)} // Armazena o valor selecionado, na vari�vel nSexo
+	oRadioSexo:bSetGet := {|u| IIF(PCount()==0,nSexo,nSexo:=u)} // Armazena o valor selecionado, na variável nSexo
 
 	// CPF
 	oSayCPF := TSay():New(25,05,{||'CPF'},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
@@ -136,9 +145,9 @@ User Function zCadastro()
 
 
 	// ================================================================================
-	// Elementos da Aba02: Endere�o
+	// Elementos da Aba02: Endereço
 	// ================================================================================
-	oSayEndereco := TSay():New(01,05,{||'Endere�o'},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+	oSayEndereco := TSay():New(01,05,{||'Endereço'},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
 	cGetEndereco := Space(30)
 	oGetEndereco := TGet():New(10,05,{|u|IIF(Pcount()>0,cGetEndereco:=u,cGetEndereco)},oFolder:aDialogs[2],96,009,"",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetEndereco,,,, )
 
@@ -147,8 +156,8 @@ User Function zCadastro()
 	cGetBairro := Space(30)
 	oGetBairro := TGet():New(10,110,{|u|IIF(Pcount()>0,cGetBairro:=u,cGetBairro)},oFolder:aDialogs[2],60,009,"",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetBairro,,,, )
 
-	// Tipo de im�vel
-	oSayImovel := TSay():New(01,180,{||'Tipo de Im�vel'},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+	// Tipo de imóvel
+	oSayImovel := TSay():New(01,180,{||'Tipo de Imóvel'},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
 	oComboImovel := TComboBox():New(010,180,{|u|if(PCount()>0,cImovel:=u,cImovel)},aImoveis,60,20,oFolder:aDialogs[2],,,,,,.T.,,,,,,,,,'cImovel')
 
 	// CEP
@@ -165,6 +174,67 @@ User Function zCadastro()
 	cGetCidade := Space(30)
 	oGetCidade := TGet():New(35,50,{|u|IIF(Pcount()>0,cGetCidade:=u,cGetCidade)},oFolder:aDialogs[2],96,009,"",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetCidade,,,, )
 
+	// ================================================================================
+	// Botões
+	// ================================================================================
+	oBtnFolder1 := TButton():New( 60, 20, "Exibir Dados", oFolder:aDialogs[1], {||;
+	aDados01 := JsonObject():New(),;
+	aDados01["nome"] := AllTrim(cGetNome),;
+	aDados01["nomeReduz"] := AllTrim(cGetNomeReduz),;
+	aDados01["dataNasc"] := dGetDataNasc,;
+	aDados01["ddd"] := AllTrim(cGetDDDCel),;
+	aDados01["celular"] := AllTrim(cGetCel),;
+	aDados01["sexo"] := aSexo[nSexo],;
+	aDados01["cpf"] := AllTrim(cGetCPF),;
+	ExibiDados(aDados01, "ABA01");
+	}, 100,15,,,.F.,.T.,.F.,,.F.,,,.F. )
+
+	oBtnFolder2 := TButton():New( 60, 20, "Exibir Dados", oFolder:aDialogs[2], {||;
+	aDados02 := JsonObject():New(),;
+	aDados02["endereco"] := AllTrim(cGetEndereco),;
+	aDados02["bairro"] := AllTrim(cGetBairro),;
+	aDados02["tipoImovel"] := cImovel,;
+	aDados02["cep"] := AllTrim(cGetCEP),;
+	aDados02["uf"] := cUF,;
+	aDados02["cidade"] := AllTrim(cGetCidade),;
+	ExibiDados(aDados02, "ABA02");
+	}, 100,15,,,.F.,.T.,.F.,,.F.,,,.F. )
+
 	// Ativa o oDialog Centralizado
 	oDialog:Activate(,,,.T.)
+Return
+
+
+
+/*/{Protheus.doc} ExibiDados
+Função reutilizável para exibir os dados.
+@type function
+@author Diego
+@since 14/05/2026
+@param aDados, JsonObject, JsonObject Contendo os dados a ser exibidos.
+@param cAba, character, Descrição da aba, pondendo ser "ABA01" ou "ABA02"
+/*/
+Static Function ExibiDados(aDados, cAba)
+	Local cMsg := ""
+
+	If cAba == "ABA01"
+		cMsg += "Nome...........: " + aDados["nome"] + CRLF
+		cMsg += "Nome Reduzido..: " + aDados["nomeReduz"] + CRLF
+		cMsg += "Data Nasc......: " + DtoC(aDados["dataNasc"]) + CRLF
+		cMsg += "DDD/Celular....: " + aDados["ddd"] +" "+ aDados["celular"] + CRLF
+		cMsg += "Sexo...........: " + aDados["sexo"] + CRLF
+		cMsg += "CPF............: " + aDados["cpf"]
+		MsgInfo(cMsg, "Dados Pessoais")
+	ElseIf cAba == "ABA02"
+		cMsg += "Logradouro.....: " + aDados["endereco"] + CRLF
+		cMsg += "Bairro.........: " + aDados["bairro"] + CRLF
+		cMsg += "Tipo de Imóvel.: " + aDados["tipoImovel"] + CRLF
+		cMsg += "CEP............: " + aDados["cep"] + CRLF
+		cMsg += "Estado.........: " + aDados["uf"] + CRLF
+		cMsg += "Cidade.........: " + aDados["cidade"]
+		MsgInfo(cMsg, "Endereço")
+	Else
+		// Se não especificar a aba, mostra tudo de uma vez
+		MsgInfo("Falha na exibição dos dados", "Nenhum Registro encontrado")
+	EndIf
 Return
