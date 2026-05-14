@@ -1,0 +1,19 @@
+#include "totvs.ch"
+
+/*/{Protheus.doc} zCadastro
+Monta a tela de cadastro com 3 abas
+@type function
+@author Diego Santana
+@since 14/05/2026
+@version 1.0
+/*/
+User Function zCadastro()
+    // Cria o TDialog (Modal para criar uma tela)
+    Local oDialog
+    Local aSize := MsAdvSize() // Permite ocupar 100% da tela de acordo com o tamanho do dispositivo.
+
+    // Cria o TDialog
+    oDialog := TDialog():New(aSize[7],aSize[1],aSize[6],aSize[5],'Cadastros',,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+    // Ativa o oDialog Centralizado
+    oDialog:Activate(,,,.T.)
+Return
