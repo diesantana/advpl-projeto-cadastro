@@ -14,7 +14,7 @@ User Function zCadastro()
 	Local oDialog
 	Local aSize := MsAdvSize() // Permite ocupar 100% da tela de acordo com o tamanho do dispositivo.
 	// Abas
-	Local aFolder := {"Dados Pessoais", "Endereço", "Outros"}
+	Local aFolder := {"Dados Pessoais", "Endereço"}
 	Local oFolder
 
 	// ===================================================================================================
@@ -24,7 +24,7 @@ User Function zCadastro()
 	Local oGetNome
 	Local cGetNome
 
-	// Nome
+	// Nome Reduzido
 	Local oSayNomeReduz
 	Local oGetNomeReduz
 	Local cGetNomeReduz
@@ -54,6 +54,40 @@ User Function zCadastro()
 	Local oSayCPF
 	Local oGetCPF
 	Local cGetCPF
+
+	// ===================================================================================================
+	// Variáveis da Aba 02: Endereço
+	// ===================================================================================================
+	Local oSayEndereco
+	Local oGetEndereco
+	Local cGetEndereco
+
+	// Bairro
+	Local oSayBairro
+	Local oGetBairro
+	Local cGetBairro
+
+	// Tipo de imóvel
+	Local oSayImovel
+	Local aImoveis := {"Casa", "Apartamento", "Outro"}
+	Local cImovel := aImoveis[1] // Armazena o valor selecionado do array aImoveis
+	Local oComboImovel
+
+	// CEP
+	Local oSayCEP
+	Local oGetCEP
+	Local cGetCEP
+
+	// Estado
+	Local oSayUF
+	Local aUF := {"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RO", "RS", "RR", "SC", "SE", "SP", "TO"}
+	Local cUF := aUF[1] // Armazena o valor selecionado do array aImoveis
+	Local oComboUF
+
+	// Cidade
+	Local oSayCidade	
+	Local oGetCidade
+	Local cGetCidade
 
 
 	// =============================================================================
@@ -99,6 +133,37 @@ User Function zCadastro()
 	oSayCPF := TSay():New(25,05,{||'CPF'},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
 	cGetCPF := Space(14)
 	oGetCPF := TGet():New(35,05,{|u|IIF(Pcount()>0,cGetCPF:=u,cGetCPF)},oFolder:aDialogs[1],96,009,"@E 999.999.999-99",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetCPF,,,,)
+
+
+	// ================================================================================
+	// Elementos da Aba02: Endereço
+	// ================================================================================
+	oSayEndereco := TSay():New(01,05,{||'Endereço'},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+	cGetEndereco := Space(30)
+	oGetEndereco := TGet():New(10,05,{|u|IIF(Pcount()>0,cGetEndereco:=u,cGetEndereco)},oFolder:aDialogs[2],96,009,"",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetEndereco,,,, )
+
+	// Bairro
+	oSayBairro := TSay():New(01,110,{||'Bairro'},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+	cGetBairro := Space(30)
+	oGetBairro := TGet():New(10,110,{|u|IIF(Pcount()>0,cGetBairro:=u,cGetBairro)},oFolder:aDialogs[2],60,009,"",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetBairro,,,, )
+
+	// Tipo de imóvel
+	oSayImovel := TSay():New(01,180,{||'Tipo de Imóvel'},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+	oComboImovel := TComboBox():New(010,180,{|u|if(PCount()>0,cImovel:=u,cImovel)},aImoveis,60,20,oFolder:aDialogs[2],,,,,,.T.,,,,,,,,,'cImovel')
+
+	// CEP
+	oSayCEP := TSay():New(01,250,{||'CEP'},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+	cGetCEP := Space(9)
+	oGetCEP := TGet():New(10,250,{|u|IIF(Pcount()>0,cGetCEP:=u,cGetCEP)},oFolder:aDialogs[2],30,009,"@E 99999-999",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetCEP,,,,)
+
+	// Estado
+	oSayUF := TSay():New(25,05,{||'Estado'},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+	oComboUF := TComboBox():New(35,05,{|u|if(PCount()>0,cUF:=u,cUF)},aUF,40,20,oFolder:aDialogs[2],,,,,,.T.,,,,,,,,,'cUF')
+
+	// Cidade
+	oSayCidade := TSay():New(25,50,{||'Cidade'},oFolder:aDialogs[2],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+	cGetCidade := Space(30)
+	oGetCidade := TGet():New(35,50,{|u|IIF(Pcount()>0,cGetCidade:=u,cGetCidade)},oFolder:aDialogs[2],96,009,"",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetCidade,,,, )
 
 	// Ativa o oDialog Centralizado
 	oDialog:Activate(,,,.T.)
