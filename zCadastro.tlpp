@@ -8,12 +8,98 @@ Monta a tela de cadastro com 3 abas
 @version 1.0
 /*/
 User Function zCadastro()
-    // Cria o TDialog (Modal para criar uma tela)
-    Local oDialog
-    Local aSize := MsAdvSize() // Permite ocupar 100% da tela de acordo com o tamanho do dispositivo.
+	// ===================================================================================================
+	// Variáveis da Estrutura da tela: TDialog e TFolder
+	// ===================================================================================================
+	Local oDialog
+	Local aSize := MsAdvSize() // Permite ocupar 100% da tela de acordo com o tamanho do dispositivo.
+	// Abas
+	Local aFolder := {"Dados Pessoais", "Endereço", "Outros"}
+	Local oFolder
 
-    // Cria o TDialog
-    oDialog := TDialog():New(aSize[7],aSize[1],aSize[6],aSize[5],'Cadastros',,,,,CLR_BLACK,CLR_WHITE,,,.T.)
-    // Ativa o oDialog Centralizado
-    oDialog:Activate(,,,.T.)
+	// ===================================================================================================
+	// Variáveis da Aba 01: Cadastros
+	// ===================================================================================================
+	Local oSayNome
+	Local oGetNome
+	Local cGetNome
+
+	// Nome
+	Local oSayNomeReduz
+	Local oGetNomeReduz
+	Local cGetNomeReduz
+
+	// Data Nascimento
+	Local oSayDataNasc
+	Local oGetDataNasc
+	Local dGetDataNasc
+
+	// DDD
+	Local oSayDDDCel
+	Local oGetDDDCel
+	Local cGetDDDCel
+
+	// Celular
+	Local oSayCel
+	Local oGetCel
+	Local cGetCel
+
+	// Group Sexo
+	Local oGroupSexo
+	Local aSexo := {"Masculino", "Feminino", "Outro"}
+	Local nSexo := 1 // Armazena o item do array aSexo selecionado. Inicia em 1 = Masculino
+	Local oRadioSexo
+
+	// CPF
+	Local oSayCPF
+	Local oGetCPF
+	Local cGetCPF
+
+
+	// =============================================================================
+	// Estrutura da tela (TDialog com Abas)
+	// =============================================================================
+	oDialog := TDialog():New(aSize[7],aSize[1],aSize[6],aSize[5],'Cadastros',,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+	// Cria as abas
+	oFolder := TFolder():New(0,0,aFolder,aFolder,oDialog,,,,.T.,,600,200)
+
+	// ================================================================================
+	// Elementos da Aba01: Cadastros
+	// ================================================================================
+	oSayNome := TSay():New(01,05,{||'Nome'},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+	cGetNome := Space(30)
+	oGetNome := TGet():New(10,05,{|u|IIF(Pcount()>0,cGetNome:=u,cGetNome)},oFolder:aDialogs[1],096,009,"",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetNome,,,, )
+
+	// Nome reduzido
+	oSayNomeReduz := TSay():New(01,110,{||'Nome Reduzido'},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+	cGetNomeReduz := Space(30)
+	oGetNomeReduz := TGet():New(10,110,{|u|IIF(Pcount()>0,cGetNomeReduz:=u,cGetNomeReduz)},oFolder:aDialogs[1],60,009,"",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetNomeReduz,,,, )
+
+	// Data de Nascimento
+	oSayDataNasc := TSay():New(01,180,{||'Data de Nascimento'},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+	dGetDataNasc := Date() // Define a data inicial
+	oGetDataNasc := TGet():New(10,180,{|u|IIF(Pcount()>0,dGetDataNasc:=u,dGetDataNasc)},oFolder:aDialogs[1],60,009,"",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,,,,,.T.)
+
+	// DDD
+	oSayDDDCel := TSay():New(01,250,{||'DDD'},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+	cGetDDDCel := Space(4)
+	oGetDDDCel := TGet():New(10,250,{|u|IIF(Pcount()>0,cGetDDDCel:=u,cGetDDDCel)},oFolder:aDialogs[1],20,009,"@E (99)",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetDDDCel,,,, )
+
+	// Celular
+	oSayCel := TSay():New(01,280,{||'Celular'},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+	cGetCel := Space(11)
+	oGetCel := TGet():New(10,280,{|u|IIF(Pcount()>0,cGetCel:=u,cGetCel)},oFolder:aDialogs[1],40,009,"@E 9-9999-9999",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetCel,,,,)
+
+	// Grupo: Sexo
+	oGroupSexo := tGroup():New(01,330,50,430,"Sexo",oFolder:aDialogs[1],,,.T.)
+	oRadioSexo := TRadMenu():New (10,340,aSexo,,oFolder:aDialogs[1],,,,,,,,60,20,,,,.T.)
+	oRadioSexo:bSetGet := {|u| IIF(PCount()==0,nSexo,nSexo:=u)} // Armazena o valor selecionado, na variável nSexo
+
+	// CPF
+	oSayCPF := TSay():New(25,05,{||'CPF'},oFolder:aDialogs[1],,,,,,.T.,CLR_BLUE,CLR_WHITE,300,20)
+	cGetCPF := Space(14)
+	oGetCPF := TGet():New(35,05,{|u|IIF(Pcount()>0,cGetCPF:=u,cGetCPF)},oFolder:aDialogs[1],96,009,"@E 999.999.999-99",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cGetCPF,,,,)
+
+	// Ativa o oDialog Centralizado
+	oDialog:Activate(,,,.T.)
 Return
