@@ -98,12 +98,21 @@ User Function zCadastro()
     Local oBtnFolder2
     Local aDados02
 
+
+    // =============================================================================
+    // Botões do CRUD (Incluir, alterar, Consultar e Excluir)
+    // =============================================================================
+    Local oBtnIncluir
+    Local oBtnAlterar
+    Local oBtnConsultar
+    Local oBtnExcluir
+
     // =============================================================================
     // Estrutura da tela (TDialog com Abas)
     // =============================================================================
-    oDialog := TDialog():New(aSize[7],aSize[1],aSize[6],aSize[5],'Cadastros',,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+    oDialog := TDialog():New(aSize[7],aSize[1],720,aSize[5],'Cadastros',,,,,CLR_BLACK,CLR_WHITE,,,.T.)
     // Cria as abas
-    oFolder := TFolder():New(0,0,aFolder,aFolder,oDialog,,,,.T.,,600,200)
+    oFolder := TFolder():New(0,0,aFolder,aFolder,oDialog,,,,.T.,,600,150)
 
     // ================================================================================
     // Elementos da Aba01: Cadastros
@@ -197,6 +206,15 @@ User Function zCadastro()
     aDados02["cidade"] := AllTrim(cGetCidade),;
     ExibiDados(aDados02, "ABA02");
     }, 100,15,,,.F.,.T.,.F.,,.F.,,,.F. )
+
+    
+    // ================================================================================
+    // Botões de CRUD
+    // ================================================================================
+    oBtnIncluir := TButton():New( 170, 20, "Incluir",oDialog,{|| Alert("Incluir registro")}, 40,15,,,.F.,.T.,.F.,,.F.,,,.F. )
+    oBtnAlterar := TButton():New( 170, 80, "Alterar",oDialog,{|| Alert("Alterar registro")}, 40,15,,,.F.,.T.,.F.,,.F.,,,.F. )
+    oBtnConsultar := TButton():New( 170, 140, "Consultar",oDialog,{|| Alert("Consultar registro")}, 40,15,,,.F.,.T.,.F.,,.F.,,,.F. )
+    oBtnExcluir := TButton():New( 170, 200, "Excluir",oDialog,{|| Alert("Excluir registro")}, 40,15,,,.F.,.T.,.F.,,.F.,,,.F. )
 
     // Ativa o oDialog Centralizado
     oDialog:Activate(,,,.T.)
